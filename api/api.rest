@@ -1,0 +1,42 @@
+@userId = 643170e8c7edfedd02d29157
+@hostname = localhost
+@port = 3000
+@baseUrl = http://{{hostname}}:{{port}}
+@contentType = application/json
+@createdAt = {{$datetime iso8601}}
+@modifiedBy = {{$processEnv USERNAME}}
+
+# get all users
+GET {{baseUrl}}/user HTTP/1.1
+
+###
+# get user by id
+GET {{baseUrl}}/user/{{userId}} HTTP/1.1
+
+###
+# update user by id
+PATCH {{baseUrl}}/user/{{userId}} HTTP/1.1
+
+{
+    "email": "john1@example.com",
+}
+
+###
+# create user
+POST {{baseUrl}}/user HTTP/1.1
+
+{
+    "name": "John Doe",
+    "email": "john1@example.com",
+    "password": "Test@123"
+}
+
+###
+# login api
+POST {{baseUrl}}/auth/login HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "email": "rakesh.sojitra@viitor.cloud",
+    "password": "Test@123"
+}
