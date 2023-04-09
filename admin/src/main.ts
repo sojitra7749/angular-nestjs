@@ -5,16 +5,23 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app/app.component';
 import { AuthInterceptor } from './app/interceptors/auth.interceptor';
+import authGuard from './app/guards/auth.guard';
+import guestGuard from './app/guards/guest.guard';
 
 
 const appRoutes: Routes = [
   {
-    path: 'auth',
-    loadComponent: () => import('./app/components/login/login.component').then(m => m.LoginComponent),
+    path: '', redirectTo: '/auth', pathMatch: 'full'
   },
   {
-    path: '',
+    path: 'auth',
     loadComponent: () => import('./app/components/login/login.component').then(m => m.LoginComponent),
+    canMatch: [guestGuard]
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./app/components/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    canMatch: [authGuard]
   },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
@@ -32,6 +39,6 @@ bootstrapApplication(AppComponent,
     ],
   }).catch(err => console.log(err));
 
-  export function getLocalStorage() {
-    return typeof window !== 'undefined' ? window.localStorage : null;
-  }
+export function getLocalStorage() {
+  return typeof window !== 'undefined' ? window.localStorage : null;
+}
