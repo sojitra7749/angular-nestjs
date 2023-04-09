@@ -8,10 +8,13 @@ import { EncryptDecryptService } from './encrypt-decrypt.service';
 export class AuthService {
   private loginUrl = '/auth/login';
 
-  constructor(private http: HttpClient, private encryptDecryptService: EncryptDecryptService) {}
+  constructor(private http: HttpClient, private encryptDecryptService: EncryptDecryptService) { }
+
 
   login(email: string, password: string) {
-    return this.http.post<any>(this.loginUrl, { email, password }).subscribe(
+    return this.http.post<{
+      accessToken: string
+    }>(this.loginUrl, { email, password }).subscribe(
       (res) => this.encryptDecryptService.setEncryptedLocalStorage('token', res.accessToken)
     );
   }

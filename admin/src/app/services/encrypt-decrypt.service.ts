@@ -21,7 +21,7 @@ export class EncryptDecryptService {
 	 * @returns Encrypted string
 	* @param {*} data
 	 */
-	encryptData(data: any): string {
+	encryptData(data: unknown): string {
 		return Buffer.from(JSON.stringify(data)).toString('base64');
 	}
 
@@ -30,7 +30,7 @@ export class EncryptDecryptService {
 	 * @returns Decrypted parsed data
 	 * @param {*} data
 	 */
-	decryptData(data: any): any {
+	decryptData(data: string): unknown {
 		const encrypted = Buffer.from(data, 'base64').toString('ascii');
 		return JSON.parse(encrypted);
 	}
@@ -40,7 +40,7 @@ export class EncryptDecryptService {
 	 * @param key LocalStorage Key
 	 * @param data Data to be stored
 	 */
-	setEncryptedLocalStorage(key: string, data: any): void {
+	setEncryptedLocalStorage(key: string, data: unknown): void {
 		const encryptedString = this.encryptData(data);
 		const keyName = this.sessionInitial + '-' + key.trim();
 		this.localStorageService.set(keyName, encryptedString);
@@ -51,12 +51,13 @@ export class EncryptDecryptService {
 	 * @param key LocalStorage Key
 	 * @returns Parsed localStorage data
 	 */
-	getDecryptedLocalStorage(key: string): any {
+	getDecryptedLocalStorage(key: string): unknown {
 		const keyName = this.sessionInitial + '-' + key.trim();
 		const localStorageData = this.localStorageService.get(keyName);
 		if (localStorageData) {
 			return this.decryptData(localStorageData);
 		}
+		return null;
 	}
 
 	/**

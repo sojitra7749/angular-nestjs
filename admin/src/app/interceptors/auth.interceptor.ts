@@ -14,9 +14,9 @@ export class AuthInterceptor implements HttpInterceptor {
 
   constructor(private encryptDecryptService: EncryptDecryptService) { }
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<void>> {
+  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<void>> {
     if (this.encryptDecryptService.getDecryptedLocalStorage('token')) {
-      const token = this.encryptDecryptService.getDecryptedLocalStorage('token');
+      const token = this.encryptDecryptService.getDecryptedLocalStorage('token') as string;
       req = req.clone({
         setHeaders: {
           Authorization: token,

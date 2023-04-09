@@ -74,5 +74,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "lint-staged": {
+    "{src,apps,libs,test}/**/*.ts": ["npm run lint"]
   }
 }

@@ -14,10 +14,11 @@ export class LocalStorageService {
    * Gets localStorage value
    * @param key Key name through which value can be accessed
    */
-  get(key: string): any {
+  get(key: string): string | null {
     if (isPlatformBrowser(this.platformId)) {
       return this.localStorage.getItem(key);
     }
+    return null;
   }
 
   /**
