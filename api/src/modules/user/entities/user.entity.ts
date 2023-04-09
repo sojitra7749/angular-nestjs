@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 
 export type UserDocument = User & Document;
@@ -15,17 +15,8 @@ export class User {
   @Prop({ required: true, select: false })
   password: string;
 
-  id: string; // define id property as string
-
-  // create a virtual property for id
-  get _id(): string {
-    return this.id;
-  }
-
-  // set _id when id is set
-  set _id(id: string) {
-    this.id = id;
-  }
+  @Prop({ type: mongoose.Schema.Types.ObjectId, auto: true })
+  id: string;
 
   async comparePassword(password: string): Promise<boolean> {
     return bcrypt.compare(password, this.password);
@@ -33,3 +24,10 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.method(
+  'comparePassword',
+  async function (candidatePassword: string) {
+    return bcrypt.compare(candidatePassword, this.password);
+  },
+);

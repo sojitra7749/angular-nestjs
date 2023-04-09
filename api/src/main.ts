@@ -5,6 +5,8 @@ import { UserService } from './modules/user/user.service';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors();
+
   const userService = app.get(UserService);
   userService.seed();
 

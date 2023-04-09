@@ -1,35 +1,47 @@
-@userId = 643170e8c7edfedd02d29157
+@userId = 64326f91c19688cc180576d2
 @hostname = localhost
 @port = 3000
 @baseUrl = http://{{hostname}}:{{port}}
 @contentType = application/json
 @createdAt = {{$datetime iso8601}}
 @modifiedBy = {{$processEnv USERNAME}}
+@TOKEN = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJha2VzaC5zb2ppdHJhQHZpaXRvci5jbG91ZCIsInN1YiI6IjY0MzI2ZjkxYzE5Njg4Y2MxODA1NzZkMiIsImlhdCI6MTY4MTAzMDY0NSwiZXhwIjoxNjgxMDY2NjQ1fQ.IXg6vxM4XM_hvzZiV0IbHBW7IZWVD3G8c0ES4JVyHX4
 
 # get all users
 GET {{baseUrl}}/user HTTP/1.1
+Authorization: {{TOKEN}}
 
 ###
 # get user by id
 GET {{baseUrl}}/user/{{userId}} HTTP/1.1
+Authorization: {{TOKEN}}
 
 ###
 # update user by id
 PATCH {{baseUrl}}/user/{{userId}} HTTP/1.1
+Authorization: {{TOKEN}}
+Content-Type: {{contentType}}
 
 {
-    "email": "john1@example.com",
+    "email": "john@example.com"
 }
 
 ###
 # create user
 POST {{baseUrl}}/user HTTP/1.1
+Authorization: {{TOKEN}}
+Content-Type: {{contentType}}
 
 {
-    "name": "John Doe",
-    "email": "john1@example.com",
+    "name": "Rakesh Sojitra",
+    "email": "rakesh.sojitra@viitor.cloud",
     "password": "Test@123"
 }
+
+###
+# Delete user by Id
+DELETE {{baseUrl}}/user/{{userId}} HTTP/1.1
+Authorization: {{TOKEN}}
 
 ###
 # login api
