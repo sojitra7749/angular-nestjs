@@ -10,6 +10,8 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
+  isMenuOpen = false;
+  
   constructor(
     private authService: AuthService
   ) { }

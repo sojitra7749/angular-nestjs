@@ -1,10 +1,5 @@
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 
 import { AuthService } from 'src/app/services/auth.service';
@@ -17,11 +12,6 @@ import { EncryptDecryptService } from 'src/app/services/encrypt-decrypt.service'
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   imports: [
-    MatInputModule,
-    MatButtonModule,
-    MatCardModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
     FormsModule
   ]
 })
@@ -52,10 +42,15 @@ export class LoginComponent {
   login(loginForm: NgForm) {
     if (loginForm.invalid) { return; }
     this.isLoading = true;
-    this.authService.login(this.email, this.password).subscribe((res) => {
-      this.encryptDecryptService.setEncryptedLocalStorage('token', res.accessToken);
-      this.router.navigate(['dashboard']);
-      this.isLoading = false;
+    this.authService.login(this.email, this.password).subscribe({
+      next: (res) => {
+        this.encryptDecryptService.setEncryptedLocalStorage('token', res.accessToken);
+        this.router.navigate(['dashboard']);
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+      }
     });
   }
 }
