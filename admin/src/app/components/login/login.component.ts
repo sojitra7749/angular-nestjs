@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { CommonModule, NgIf } from '@angular/common';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs';
 
-import { AuthService } from 'src/app/services/auth.service';
-import { EncryptDecryptService } from 'src/app/services/encrypt-decrypt.service';
+import { ILogin } from '@interfaces/login.interface';
+import { AuthService } from '@services/auth.service';
+import { CryptoService } from '@services/crypto.service';
 
 
 @Component({
@@ -12,20 +15,33 @@ import { EncryptDecryptService } from 'src/app/services/encrypt-decrypt.service'
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   imports: [
-    FormsModule
+    FormsModule,
+    NgIf,
+    CommonModule
   ]
 })
-export class LoginComponent {
-  email!: string;
-  password!: string;
+export class LoginComponent implements OnInit {
+  @ViewChild('frm') frm!: NgForm;
+  loginForm: ILogin = {
+    email: '',
+    password: ''
+  };
+  remember = true;
   hide = true;
   isLoading = false;
 
   constructor(
     private authService: AuthService,
-    private encryptDecryptService: EncryptDecryptService,
+    private cryptoService: CryptoService,
     private router: Router
   ) { }
+
+  ngOnInit(): void {
+    const loginInfo = this.cryptoService.getDecryptedStorage('loginInfo') as ILogin;
+    if (loginInfo) {
+      this.loginForm = loginInfo;
+    }
+  }
 
   /**
    * This function logs in a user by sending their email and password to the server, storing the access
@@ -39,18 +55,21 @@ export class LoginComponent {
    * response is received, it will set the encrypted token in local storage and navigate to the
    * dashboard route. Finally, it will set `isLoading` to false.
    */
-  login(loginForm: NgForm) {
-    if (loginForm.invalid) { return; }
+  login() {
+    if (this.frm.invalid) { return; }
+
+    if (this.remember) {
+      this.cryptoService.setEncryptedStorage('loginInfo', this.loginForm);
+    } else {
+      this.cryptoService.removeEncryptedStorage('loginInfo');
+    }
+
     this.isLoading = true;
-    this.authService.login(this.email, this.password).subscribe({
-      next: (res) => {
-        this.encryptDecryptService.setEncryptedLocalStorage('token', res.accessToken);
+    this.authService.login(this.loginForm.email, this.loginForm.password)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe((res) => {
+        this.cryptoService.setEncryptedStorage('token', res.accessToken);
         this.router.navigate(['dashboard']);
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-      }
-    });
+      });
   }
 }

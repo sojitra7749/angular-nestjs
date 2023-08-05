@@ -1,17 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
+
+import { openClose } from '@animations/open-close.animations';
+import { AuthService } from '@services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
+  animations: [openClose]
 })
 export class DashboardComponent {
   isMenuOpen = false;
-  
+
   constructor(
     private authService: AuthService
   ) { }

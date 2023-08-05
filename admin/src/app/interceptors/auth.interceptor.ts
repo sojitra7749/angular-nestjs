@@ -7,16 +7,16 @@ import {
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { EncryptDecryptService } from '../services/encrypt-decrypt.service';
+import { CryptoService } from '../services/crypto.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private encryptDecryptService: EncryptDecryptService) { }
+  constructor(private cryptoService: CryptoService) { }
 
   intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<void>> {
-    if (this.encryptDecryptService.getDecryptedLocalStorage('token')) {
-      const token = this.encryptDecryptService.getDecryptedLocalStorage('token') as string;
+    if (this.cryptoService.getDecryptedStorage('token')) {
+      const token = this.cryptoService.getDecryptedStorage('token') as string;
       req = req.clone({
         setHeaders: {
           Authorization: token,
