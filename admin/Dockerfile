@@ -7,8 +7,6 @@ RUN npm install -g @angular/cli@16.1.0
 
 COPY package*.json ./
 
-RUN npm install --legacy-peer-deps
+RUN npm install
 
 COPY . .
-
-RUN npm run start
