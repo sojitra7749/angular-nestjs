@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { EncryptDecryptService } from './encrypt-decrypt.service';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { CryptoService } from '@services/crypto.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,11 @@ import { Router } from '@angular/router';
 export class AuthService {
   private loginUrl = '/auth/login';
 
-  constructor(private http: HttpClient, private encryptDecryptService: EncryptDecryptService, private router: Router) { }
+  constructor(
+    private http: HttpClient,
+    private cryptoService: CryptoService,
+    private router: Router
+  ) { }
 
 
   login(email: string, password: string) {
@@ -17,11 +22,11 @@ export class AuthService {
   }
 
   public isLoggedIn() {
-    return this.encryptDecryptService.getDecryptedLocalStorage('token');
+    return this.cryptoService.getDecryptedStorage('token');
   }
 
   public logout() {
     this.router.navigate(['/auth']);
-    return this.encryptDecryptService.removeEncryptedLocalStorage('token');
+    return this.cryptoService.removeEncryptedStorage('token');
   }
 }

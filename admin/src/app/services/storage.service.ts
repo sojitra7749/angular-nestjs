@@ -4,50 +4,50 @@ import { Inject, Injectable, InjectionToken, PLATFORM_ID } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class LocalStorageService {
+export class StorageService {
   constructor(
-    @Inject(PLATFORM_ID) public platformId: InjectionToken<object>,
-    @Inject('LOCALSTORAGE') public localStorage: Storage,
+    @Inject(PLATFORM_ID) private platformId: InjectionToken<object>,
+    @Inject('STORAGE') private storage: Storage,
   ) { }
 
   /**
-   * Gets localStorage value
+   * Gets storage value
    * @param key Key name through which value can be accessed
    */
   get(key: string): string | null {
     if (isPlatformBrowser(this.platformId)) {
-      return this.localStorage.getItem(key);
+      return this.storage.getItem(key);
     }
     return null;
   }
 
   /**
-   * Sets localStorage value
+   * Sets storage value
    * @param key Key name through which value can be accessed
-   * @param value LocalStorage value
+   * @param value Storage value
    */
   set(key: string, value: string) {
     if (isPlatformBrowser(this.platformId)) {
-      this.localStorage.setItem(key, value);
+      this.storage.setItem(key, value);
     }
   }
 
   /**
-   * Removes localStorage of particular key
+   * Removes storage of particular key
    * @param key Key name through which value can be accessed
    */
   remove(key: string) {
     if (isPlatformBrowser(this.platformId)) {
-      this.localStorage.removeItem(key);
+      this.storage.removeItem(key);
     }
   }
 
   /**
-   * Empties the list stored in window localStorage with the object of all key/value pairs, if localStorage are there.
+   * Empties the list stored in window storage with the object of all key/value pairs, if storage are there.
    */
   clear() {
     if (isPlatformBrowser(this.platformId)) {
-      this.localStorage.clear();
+      this.storage.clear();
     }
   }
 }

@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Buffer } from 'buffer';
-import { LocalStorageService } from './local-storage.service';
+
+import { StorageService } from '@services/storage.service';
 
 @Injectable({
 	providedIn: 'root'
 })
-export class EncryptDecryptService {
+export class CryptoService {
 
 	sessionInitial = 'rs';
 
 	/**
-	 *Creates an instance of EncryptDecryptService.
+	 *Creates an instance of CryptoService.
 	 */
 	constructor(
-		private localStorageService: LocalStorageService,
+		private storageService: StorageService,
 	) { }
 
 	/**
@@ -36,36 +37,36 @@ export class EncryptDecryptService {
 	}
 
 	/**
-	 * Sets encrypted secured localStorage data
-	 * @param key LocalStorage Key
+	 * Sets encrypted secured storage data
+	 * @param key Storage Key
 	 * @param data Data to be stored
 	 */
-	setEncryptedLocalStorage(key: string, data: unknown): void {
+	setEncryptedStorage(key: string, data: unknown): void {
 		const encryptedString = this.encryptData(data);
 		const keyName = this.sessionInitial + '-' + key.trim();
-		this.localStorageService.set(keyName, encryptedString);
+		this.storageService.set(keyName, encryptedString);
 	}
 
 	/**
-	 * Gets secured localStorage data after decryption
-	 * @param key LocalStorage Key
-	 * @returns Parsed localStorage data
+	 * Gets secured storage data after decryption
+	 * @param key Storage Key
+	 * @returns Parsed storage data
 	 */
-	getDecryptedLocalStorage(key: string): unknown {
+	getDecryptedStorage(key: string): unknown {
 		const keyName = this.sessionInitial + '-' + key.trim();
-		const localStorageData = this.localStorageService.get(keyName);
-		if (localStorageData) {
-			return this.decryptData(localStorageData);
+		const storageData = this.storageService.get(keyName);
+		if (storageData) {
+			return this.decryptData(storageData);
 		}
 		return null;
 	}
 
 	/**
-	 * Removes encrypted localStorage data
-	 * @param key LocalStorage Key
+	 * Removes encrypted storage data
+	 * @param key Storage Key
 	 */
-	removeEncryptedLocalStorage(key: string): void {
+	removeEncryptedStorage(key: string): void {
 		const keyName = this.sessionInitial + '-' + key.trim();
-		this.localStorageService.remove(keyName);
+		this.storageService.remove(keyName);
 	}
 }

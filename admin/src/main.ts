@@ -3,10 +3,11 @@ import { importProvidersFrom } from '@angular/core';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
-import { AppComponent } from './app/app.component';
-import { AuthInterceptor } from './app/interceptors/auth.interceptor';
-import authGuard from './app/guards/auth.guard';
-import guestGuard from './app/guards/guest.guard';
+
+import { AppComponent } from '@app/app.component';
+import authGuard from '@guards/auth.guard';
+import guestGuard from '@guards/guest.guard';
+import { AuthInterceptor } from '@interceptors/auth.interceptor';
 
 
 const appRoutes: Routes = [
@@ -35,10 +36,10 @@ bootstrapApplication(AppComponent,
         HttpClientModule, BrowserAnimationsModule,
       ),
       { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-      { provide: 'LOCALSTORAGE', useFactory: getLocalStorage },
+      { provide: 'STORAGE', useFactory: getStorage },
     ],
   }).catch(err => console.log(err));
 
-export function getLocalStorage() {
+export function getStorage() {
   return typeof window !== 'undefined' ? window.localStorage : null;
 }
