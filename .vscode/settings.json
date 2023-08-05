@@ -41,7 +41,10 @@
         "source.organizeImports": true,
     },
     "html.format.extraLiners": "",
-    "cSpell.words": [  ],
+    "cSpell.words": [],
     "editor.formatOnSave": true,
-    "docwriter.style": "Auto-detect"
+    "docwriter.style": "Auto-detect",
+    "editor.tabSize": 2,
+    "javascript.format.semicolons": "insert",
+    "typescript.format.semicolons": "insert"
 }
