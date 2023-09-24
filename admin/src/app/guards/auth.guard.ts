@@ -6,7 +6,7 @@ export default () => {
   const authService = inject(AuthService);
   const router = inject(Router);
   if (!authService.isLoggedIn()) {
-    return router.navigate(['/auth']);
+    return router.navigate(['/auth/login']);
   }
   return true;
 };

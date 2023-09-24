@@ -5,32 +5,21 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from '@app/app.component';
-import authGuard from '@guards/auth.guard';
-import guestGuard from '@guards/guest.guard';
 import { AuthInterceptor } from '@interceptors/auth.interceptor';
+import { appRoutes } from '@routes/app.routes';
+import { authRoutes } from '@routes/auth.routes';
 
 
-const appRoutes: Routes = [
-  {
-    path: '', redirectTo: '/auth', pathMatch: 'full'
-  },
-  {
-    path: 'auth',
-    loadComponent: () => import('./app/components/login/login.component').then(m => m.LoginComponent),
-    canMatch: [guestGuard]
-  },
-  {
-    path: 'dashboard',
-    loadComponent: () => import('./app/components/dashboard/dashboard.component').then(m => m.DashboardComponent),
-    canMatch: [authGuard]
-  },
+const routes: Routes = [
+  ...authRoutes,
+  ...appRoutes,
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 
 bootstrapApplication(AppComponent,
   {
     providers: [
-      importProvidersFrom([RouterModule.forRoot(appRoutes)],
+      importProvidersFrom([RouterModule.forRoot(routes)],
         BrowserModule,
         BrowserAnimationsModule,
         HttpClientModule, BrowserAnimationsModule,

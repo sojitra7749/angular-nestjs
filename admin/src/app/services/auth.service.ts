@@ -18,7 +18,7 @@ export class AuthService {
 
 
   login(email: string, password: string) {
-    return this.http.post<{ accessToken: string }>(this.loginUrl, { email, password });
+    return this.http.post<{ accessToken: string; }>(this.loginUrl, { email, password });
   }
 
   public isLoggedIn() {
@@ -26,7 +26,7 @@ export class AuthService {
   }
 
   public logout() {
-    this.router.navigate(['/auth']);
+    this.router.navigate([this.loginUrl]);
     return this.cryptoService.removeEncryptedStorage('token');
   }
 }
