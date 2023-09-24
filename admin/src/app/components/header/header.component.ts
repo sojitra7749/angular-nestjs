@@ -1,19 +1,20 @@
-import { CommonModule } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { openClose } from '@animations/open-close.animations';
 import { AuthService } from '@services/auth.service';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
+  imports: [NgIf, NgClass, RouterLink],
+  templateUrl: './header.component.html',
   animations: [openClose]
 })
-export class DashboardComponent {
-  isMenuOpen = false;
+export class HeaderComponent {
+  isUMenuOpen = false;
+  isMMenuOpen = false;
 
   constructor(
     private authService: AuthService

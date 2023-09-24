@@ -1,4 +1,4 @@
-import { CommonModule, NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -13,12 +13,7 @@ import { CryptoService } from '@services/crypto.service';
   standalone: true,
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
-  imports: [
-    FormsModule,
-    NgIf,
-    CommonModule
-  ]
+  imports: [NgIf, NgClass, FormsModule]
 })
 export class LoginComponent implements OnInit {
   @ViewChild('frm') frm!: NgForm;
@@ -69,7 +64,7 @@ export class LoginComponent implements OnInit {
       .pipe(finalize(() => this.isLoading = false))
       .subscribe((res) => {
         this.cryptoService.setEncryptedStorage('token', res.accessToken);
-        this.router.navigate(['dashboard']);
+        this.router.navigate(['/']);
       });
   }
 }

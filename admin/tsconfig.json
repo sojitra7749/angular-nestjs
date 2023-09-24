@@ -27,6 +27,9 @@
       "@app/*": [
         "src/app/*"
       ],
+      "@routes/*": [
+        "src/app/routes/*"
+      ],
       "@guards/*": [
         "src/app/guards/*"
       ],
@@ -41,7 +44,13 @@
       ],
       "@animations/*": [
         "src/app/animations/*"
-      ]
+      ],
+      "@pages/*": [
+        "src/app/pages/*"
+      ],
+      "@components/*": [
+        "src/app/components/*"
+      ],
     }
   },
   "angularCompilerOptions": {
