@@ -1,11 +1,13 @@
 import { NgClass, NgIf } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, Input, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ModalData } from '@interfaces/modal.class';
 import { DialogService } from '@services/dialog.service';
 import { ToasterService } from '@services/toaster.service';
 import { UserService } from '@services/user.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-form',
@@ -14,8 +16,10 @@ import { UserService } from '@services/user.service';
   imports: [NgIf, NgClass, ReactiveFormsModule]
 })
 export class FormComponent implements OnInit {
+  #destroyRef = inject(DestroyRef);
   userFrom!: FormGroup;
   @Input() data!: ModalData;
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -51,21 +55,29 @@ export class FormComponent implements OnInit {
   }
 
   create() {
+    this.isLoading = true;
     this.userService.create({
       ...this.userFrom.value,
       password: 'Test@123' // TODO: dynamic password generate and send email
-    }).subscribe(() => {
+    }).pipe(
+      takeUntilDestroyed(this.#destroyRef),
+      finalize(() => this.isLoading = false)
+    ).subscribe(() => {
       this.toasterService.showToast('User created successfully!');
-      this.dialogService.confirmUserDecision(true);
+      this.userService.refresh$.next(true);
       this.closeModal();
     });
   }
 
   update() {
+    this.isLoading = true;
     this.userService.update(this.data.user.id, this.userFrom.value)
-      .subscribe(() => {
+      .pipe(
+        takeUntilDestroyed(this.#destroyRef),
+        finalize(() => this.isLoading = false)
+      ).subscribe(() => {
         this.toasterService.showToast('User updated successfully!');
-        this.dialogService.confirmUserDecision(true);
+        this.userService.refresh$.next(true);
         this.closeModal();
       });
   }

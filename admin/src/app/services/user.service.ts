@@ -4,7 +4,7 @@ import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
 import { API } from '@constants/api.constant';
 import { CreateUser, User, UserList, UserListQueryParams } from '@interfaces/user.model';
 import { BaseService } from '@services/base.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 export const UserDetail: ResolveFn<Observable<CreateUser | unknown>> =
   (route: ActivatedRouteSnapshot) => {
@@ -16,6 +16,8 @@ export const UserDetail: ResolveFn<Observable<CreateUser | unknown>> =
   providedIn: 'root'
 })
 export class UserService extends BaseService<User, UserList, UserListQueryParams> {
+
+  refresh$ = new Subject<boolean>();
 
   getEndPoint(): string {
     return API.USERS;

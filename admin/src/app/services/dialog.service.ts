@@ -14,7 +14,7 @@ export class DialogService {
     this.confirm$.next(confirm);
   }
 
-  open(component: Type<any>, option: { dcContainer: DcDirective; data: any; }): void {
+  open(component: Type<any>, option: { dcContainer: DcDirective; data: any; }) {
     this.vc = option.dcContainer.viewContainerRef;
     this.vc.clear();
 
@@ -23,8 +23,6 @@ export class DialogService {
   }
 
   close() {
-    if (this.vc) {
-      this.vc.clear();
-    }
+    this.vc?.clear();
   }
 }

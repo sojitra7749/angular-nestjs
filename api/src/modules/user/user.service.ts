@@ -52,6 +52,7 @@ export class UserService {
 
     const data = await this.userModel
       .find(filter)
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(perPage)
       .exec();
