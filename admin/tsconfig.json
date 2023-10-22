@@ -30,6 +30,9 @@
       "@routes/*": [
         "src/app/routes/*"
       ],
+      "@constants/*": [
+        "src/app/constants/*"
+      ],
       "@guards/*": [
         "src/app/guards/*"
       ],

@@ -4,10 +4,11 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 
+import { STORAGE } from '@constants/storage.constant';
 import { ILogin } from '@interfaces/login.interface';
 import { AuthService } from '@services/auth.service';
 import { CryptoService } from '@services/crypto.service';
-
+import { ToasterService } from '@services/toaster.service';
 
 @Component({
   standalone: true,
@@ -28,11 +29,12 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private cryptoService: CryptoService,
+    private toasterService: ToasterService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    const loginInfo = this.cryptoService.getDecryptedStorage('loginInfo') as ILogin;
+    const loginInfo = this.cryptoService.getDecryptedStorage(STORAGE.REMEMBER_ME) as ILogin;
     if (loginInfo) {
       this.loginForm = loginInfo;
     }
@@ -54,17 +56,19 @@ export class LoginComponent implements OnInit {
     if (this.frm.invalid) { return; }
 
     if (this.remember) {
-      this.cryptoService.setEncryptedStorage('loginInfo', this.loginForm);
+      this.cryptoService.setEncryptedStorage(STORAGE.REMEMBER_ME, this.loginForm);
     } else {
-      this.cryptoService.removeEncryptedStorage('loginInfo');
+      this.cryptoService.removeEncryptedStorage(STORAGE.REMEMBER_ME);
     }
 
     this.isLoading = true;
     this.authService.login(this.loginForm.email, this.loginForm.password)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe((res) => {
-        this.cryptoService.setEncryptedStorage('token', res.accessToken);
-        this.router.navigate(['/']);
+        this.cryptoService.setEncryptedStorage(STORAGE.LOGIN_TOKEN, res.accessToken);
+        this.router.navigate(['/']).then(() => {
+          this.toasterService.showToast('Login successfully!');
+        });
       });
   }
 }

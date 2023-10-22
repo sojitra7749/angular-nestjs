@@ -1,0 +1,5 @@
+<div class="fixed top-3 right-3 p-3 rounded-md  text-white z-10"
+  [ngClass]="{'bg-red-500': toaster.type === 'error', 'bg-green-500': toaster.type === 'success'}" *ngIf="toaster">
+  {{ toaster.message }}
+  <button (click)="closeToast()" class="text-white ml-2">Close</button>
+</div>
