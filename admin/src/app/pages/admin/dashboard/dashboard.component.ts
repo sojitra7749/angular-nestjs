@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+// import { Chart, initTE } from 'tw-elements';
+
+// initTE({ Chart });
 
 @Component({
   selector: 'app-dashboard',

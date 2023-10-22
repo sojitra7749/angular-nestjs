@@ -1,14 +1,13 @@
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { importProvidersFrom } from '@angular/core';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from '@app/app.component';
-import { AuthInterceptor } from '@interceptors/auth.interceptor';
+import { HttpErrorInterceptor, HttpTokenInterceptor } from '@app/interceptors/http.interceptor';
 import { appRoutes } from '@routes/app.routes';
 import { authRoutes } from '@routes/auth.routes';
-
 
 const routes: Routes = [
   ...authRoutes,
@@ -19,12 +18,14 @@ const routes: Routes = [
 bootstrapApplication(AppComponent,
   {
     providers: [
+      provideHttpClient(
+        withInterceptors([HttpTokenInterceptor, HttpErrorInterceptor])
+      ),
       importProvidersFrom([RouterModule.forRoot(routes)],
         BrowserModule,
         BrowserAnimationsModule,
         HttpClientModule, BrowserAnimationsModule,
       ),
-      { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
       { provide: 'STORAGE', useFactory: getStorage },
     ],
   }).catch(err => console.log(err));

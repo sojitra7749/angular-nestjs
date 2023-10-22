@@ -1,7 +1,7 @@
 @userId = 643c04fb51bdef2188ce9c07
 @hostname = localhost
 @port = 3000
-@baseUrl = http://{{hostname}}:{{port}}
+@baseUrl = http://{{hostname}}:{{port}}/api
 @contentType = application/json
 @createdAt = {{$datetime iso8601}}
 @modifiedBy = {{$processEnv USERNAME}}

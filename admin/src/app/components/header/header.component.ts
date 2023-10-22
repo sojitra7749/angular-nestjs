@@ -1,6 +1,6 @@
 import { NgClass, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import { openClose } from '@animations/open-close.animations';
 import { AuthService } from '@services/auth.service';
@@ -8,7 +8,7 @@ import { AuthService } from '@services/auth.service';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [NgIf, NgClass, RouterLink],
+  imports: [NgIf, NgClass, RouterLink, RouterLinkActive],
   templateUrl: './header.component.html',
   animations: [openClose]
 })
