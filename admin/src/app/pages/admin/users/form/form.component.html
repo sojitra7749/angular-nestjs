@@ -28,7 +28,8 @@
           (click)="closeModal()">Cancel</button>
         <button type="submit"
           class="flex justify-center ml-2 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-          {{ data.user ? 'Update': 'Create' }}
+          <span *ngIf="isLoading">{{ data.user ? 'Updating': 'Creating' }}</span>
+          <span *ngIf="!isLoading">{{ data.user ? 'Update': 'Create' }}</span>
         </button>
       </div>
     </form>
